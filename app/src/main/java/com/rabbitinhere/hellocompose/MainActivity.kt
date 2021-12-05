@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -44,9 +47,18 @@ class MainActivity : AppCompatActivity() {
 
     @Composable
     fun Conversation(messages: List<Message>){
-        LazyColumn{
-            items(messages){ message ->
-                MessageCard(message)
+        var shouldShowTitle by rememberSaveable { mutableStateOf(true) } //并不是真的持久化，因为推出app再进就恢复了。感觉就是一个在Application层面的内存
+
+        Column{
+            if(shouldShowTitle) {
+                Text(text = "show first, click dismiss", Modifier.clickable {
+                    shouldShowTitle = false
+                })
+            }
+            LazyColumn{
+                items(messages){ message ->
+                    MessageCard(message)
+                }
             }
         }
     }
@@ -61,6 +73,7 @@ class MainActivity : AppCompatActivity() {
                     .size(40.dp)
                     .clip(CircleShape)
                     .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
+                    .align(Alignment.CenterVertically)
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -71,13 +84,15 @@ class MainActivity : AppCompatActivity() {
                 Text(
                     text = msg.author,
                     color = MaterialTheme.colors.myExtraColor,
-                    style = MaterialTheme.typography.subtitle2
+                    style = MaterialTheme.typography.subtitle2,
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(40.dp))
                 Surface(shape = MaterialTheme.shapes.medium, elevation = 1.dp,
                 color = sufaceColor) {
                     Text(text = msg.body, style = MaterialTheme.typography.body2,
-                    modifier = Modifier.animateContentSize().padding(1.dp),
+                    modifier = Modifier
+                        .animateContentSize()
+                        .padding(1.dp),
                     maxLines = if(isExpanded) Int.MAX_VALUE else 1)
                 }
             }
