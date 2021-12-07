@@ -6,24 +6,23 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -33,6 +32,7 @@ import com.rabbitinhere.hellocompose.theme.MyCustomMaterialThemeBlue
 import com.rabbitinhere.hellocompose.theme.MyCustomMaterialThemePink
 import com.rabbitinhere.hellocompose.theme.MyCustomeMaterialTheme
 import com.rabbitinhere.hellocompose.theme.myExtraColor
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +119,78 @@ class MainActivity : AppCompatActivity() {
     {
         MyCustomMaterialThemeBlue {
             Conversation(messages = SampleData.conversationSample)
+        }
+    }
+
+    @Preview(
+        name = "BOX"
+    )
+    @Composable
+    fun PreviewBOX()
+    {
+        MyCustomMaterialThemeBlue {
+            myBox()
+        }
+    }
+
+    @Composable
+    private fun myBox()
+    {
+        Box(modifier = Modifier
+            .size(200.dp)
+            .clip(RoundedCornerShape(50.dp))
+        ) {
+            Image(
+                painter = painterResource(R.drawable.cat11),
+                contentDescription = "Profile picture",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+            )
+            Text("left start", modifier = Modifier.align(Alignment.TopStart))
+
+            Text("center bottom", modifier = Modifier.align(Alignment.BottomCenter))
+            Text("right bottom", modifier = Modifier.align(Alignment.BottomEnd))
+
+        }
+    }
+
+    @Preview(name = "dick")
+    @Composable
+    private fun preDick()
+    {
+        dick()
+    }
+
+
+    @Composable
+    private fun dick()
+    {
+        MyCustomMaterialThemeBlue {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+
+                drawCircle(
+                    color = Color.Gray,
+                    center = Offset(x = canvasWidth / 2 - 200, y = canvasHeight / 2 + 200),
+                    radius = size.minDimension / 4
+                )
+
+                drawCircle(
+                    color = Color.Gray,
+                    center = Offset(x = canvasWidth / 2 + 200, y = canvasHeight / 2 + 200),
+                    radius = size.minDimension / 4
+                )
+
+                val x = (canvasWidth - 500F) / 2
+                drawRoundRect(
+                    color = Color.Gray,
+                    topLeft = Offset(x, 100F),
+                    size = Size(500F, 1000F),
+                    cornerRadius = CornerRadius(size.minDimension / 4)
+                )
+            }
         }
     }
 
