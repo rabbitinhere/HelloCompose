@@ -5,7 +5,14 @@ plugins {
 
 android {
     compileSdk 30
-
+    signingConfigs {
+        config {
+            keyAlias '123'
+            keyPassword '123456'
+            storeFile file('123.jks')
+            storePassword '123456'
+        }
+    }
     defaultConfig {
         applicationId "com.rabbitinhere.hellocompose"
         minSdk 21
@@ -29,6 +36,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     compileOptions {
